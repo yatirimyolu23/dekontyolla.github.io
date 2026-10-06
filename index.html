@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="tr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#15803d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Dekont">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<title>Öğrenci Dekont Sistemi</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--g900:#0f4d2c;--g700:#15803d;--g500:#22a35a;--g200:#c3d9cb;--g100:#dcebe1;--g50:#e8ecea;--w:#f3f5f4;--bg:#dce1de;--mut:#5d8a70}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--g900);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+header{background:linear-gradient(135deg,var(--g700),var(--g500));color:var(--w);padding:16px;border-radius:0 0 24px 24px;box-shadow:0 6px 18px rgba(21,128,61,.18)}
+.hin{max-width:760px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:10px}
+header h1{font-size:18px;margin:0;color:var(--w)}
+#admBtn{background:rgba(255,255,255,.95);color:var(--g700);box-shadow:none;padding:9px 14px;font-size:14px}
+.wrap{max-width:760px;margin:0 auto;padding:18px 16px 40px}
+h2{font-size:17px;margin:0 0 12px;color:var(--g700)}
+.card{background:var(--w);border-radius:20px;padding:18px;margin-bottom:16px;box-shadow:0 2px 12px rgba(21,128,61,.08)}
+label{display:block;font-size:13px;color:var(--mut);margin:12px 0 6px}
+input,select{font:inherit;font-size:16px;width:100%;padding:13px 14px;border-radius:14px;border:1.5px solid var(--g200);background:var(--g50);color:var(--g900);outline:none}
+input[type=file]{padding:10px;border:2px dashed var(--g200);background:var(--g50);color:var(--mut);font-size:14px;cursor:pointer}
+input[type=file]::file-selector-button{font:inherit;font-weight:600;font-size:14px;padding:9px 16px;margin-right:12px;border:0;border-radius:12px;background:var(--g100);color:var(--g700);cursor:pointer;box-shadow:none}
+input:focus,select:focus{border-color:var(--g500);background:var(--w)}
+button{font:inherit;font-weight:600;font-size:15px;padding:12px 18px;border-radius:14px;border:0;cursor:pointer;background:var(--g700);color:var(--w);margin-top:14px;box-shadow:0 4px 10px rgba(21,128,61,.2);transition:transform .08s}
+button:active{transform:scale(.97)}
+button.sec{background:var(--g100);color:var(--g700);box-shadow:none;margin:0;padding:9px 14px;font-size:14px}
+button.full{width:100%}
+button:disabled{opacity:.6}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:130px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+.top h2{margin:0;font-size:19px}
+.msg{margin-top:12px;font-size:14px;font-weight:600;color:var(--g700)}.mut{color:var(--mut);font-size:13px}
+.item{background:var(--g50);border-radius:16px;padding:12px 14px;margin-bottom:10px}
+.item .t{font-weight:600}.item .s{font-size:13px;color:var(--mut)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--g100);color:var(--g700)}
+.badge.lock{background:var(--g700);color:var(--w)}.badge.wait{background:var(--w);color:var(--g700);border:1.5px solid var(--g500)}
+.pin{font-family:ui-monospace,Menlo,monospace;letter-spacing:2px;font-weight:700;color:var(--g700)}
+.ov{position:fixed;inset:0;background:rgba(15,77,44,.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:9}
+.ov .card{width:100%;max-width:340px;margin:0}
+.pv{position:fixed;inset:0;background:var(--bg);z-index:10;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+.pvh{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 14px;background:var(--w);box-shadow:0 2px 8px rgba(21,128,61,.1)}
+.pvb{flex:1;overflow:auto;padding:12px;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+.pvb canvas{display:block;width:100%;max-width:900px;margin:0 auto 12px;border-radius:10px;background:var(--w);box-shadow:0 2px 10px rgba(21,128,61,.12)}
+.mh{display:flex;justify-content:space-between;align-items:center;cursor:pointer;margin-bottom:0}
+.mb{margin:6px 0 14px;padding-left:8px;border-left:3px solid var(--g200)}
+.sub{background:var(--w);border-radius:14px;padding:10px 12px;margin-bottom:8px}
+#toasts{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:0;right:0;z-index:30;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;padding:0 12px}
+.toast{pointer-events:auto;background:var(--g700);color:#fff;border-radius:16px;padding:12px 16px;box-shadow:0 8px 24px rgba(15,77,44,.3);max-width:420px;width:100%;font-size:14px;font-weight:600}
+</style>
+<script src="ayarlar.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
+</head><body>
+<header><div class="hin"><h1>🧾 Dekont Sistemi</h1><button id="admBtn" style="display:none">Yönetici Paneli</button></div></header>
+<div class="wrap" id="app"><p class="mut">Yükleniyor…</p></div><div id="pv"></div><div id="cf"></div><div id="toasts"></div>
+<script>
+const MONTHS=["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
+const MAX_BYTES=1024*1024,CHUNK=150*1024;
+const ADMINS=[{u:"burhans",name:"Burhan Alper",h:"e557a09d94964650cb1cb1639ea105b0ab8624ac7f8a1665810da4c61d8beba0"}];
+const sha=async t=>[...new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t)))].map(x=>x.toString(16).padStart(2,"0")).join("");
+let adminName="",sY=0,yr=0,openM=new Set(),zipBusy="",db=null,dl=null,isAdmin=false,students=[],receipts=[],me=null,view="home",msg="",showLogin=false,loginErr="",connMsg="Bağlanıyor…",f1="",f2="",f3="";
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const pin4=()=>String(Math.floor(Math.random()*10000)).padStart(4,"0");
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const patch=async(r,p)=>{const o={...r,...p};delete o.id;await db.doc("receipts/"+r.id).set(o);};
+
+const NOW=new Date(),NIDX=NOW.getFullYear()*12+NOW.getMonth();
+const START=2026*12+8;
+const okMonth=(y,m)=>{const i=y*12+m;return i>=START&&i<=NIDX-1;};
+const allowedMonths=y=>MONTHS.map((_,i)=>i).filter(m=>okMonth(y,m));
+function availYears(extra=[]){const ys=[];for(let y=2026;y<=NOW.getFullYear();y++)if(allowedMonths(y).length||extra.includes(y))ys.push(y);return ys.length?ys:[2026];}
+function ask(text,yes="Evet, sil"){return new Promise(res=>{const c=$("#cf");
+  c.innerHTML=`<div class="ov" style="z-index:20"><div class="card"><h2>Onay</h2><p>${esc(text)}</p><div class="row"><button id="cy" class="full">${yes}</button><button id="cn" class="sec full" style="margin-top:14px;padding:12px">Vazgeç</button></div></div></div>`;
+  $("#cy").onclick=()=>{c.innerHTML="";res(true);};$("#cn").onclick=()=>{c.innerHTML="";res(false);};});}
+let localMode=false;
+function localDb(){
+  let store={};try{store=JSON.parse(localStorage.getItem("dekont_local")||"{}");}catch(e){}
+  const ls=[],save=()=>{try{localStorage.setItem("dekont_local",JSON.stringify(store));}catch(e){}ls.forEach(f=>f());};
+  const depth=k=>k.split("/").length;
+  return{
+    doc:path=>({
+      async get(){const d=store[path];return{id:path.split("/").pop(),exists:!!d,data:()=>d};},
+      async set(o){store[path]=JSON.parse(JSON.stringify(o));save();},
+      async delete(){delete store[path];save();}}),
+    collection:name=>({onSnapshot(next){
+      const f=()=>next({docs:Object.keys(store).filter(k=>k.startsWith(name+"/")&&depth(k)===2).map(k=>({id:k.split("/")[1],data:()=>store[k]}))});
+      ls.push(f);f();return()=>{ls.splice(ls.indexOf(f),1);};}})
+  };
+}
+const localDl={save:async({filename,data})=>{const a=document.createElement("a");a.href=URL.createObjectURL(data);a.download=filename;document.body.appendChild(a);a.click();a.remove();}};
+/* Supabase bilgileri ayarlar.js dosyasından gelir */
+const SB_URL=(typeof SUPABASE_URL!=="undefined"&&SUPABASE_URL)||"",SB_KEY=(typeof SUPABASE_KEY!=="undefined"&&SUPABASE_KEY)||"";
+/* ======================================================== */
+function supaDb(){
+  const sb=supabase.createClient(SB_URL,SB_KEY);
+  return{
+    doc:path=>({
+      async get(){const {data,error}=await sb.from("kv").select("data").eq("path",path).maybeSingle();if(error)throw{code:error.code||"hata"};return{id:path.split("/").pop(),exists:!!data,data:()=>data&&data.data};},
+      async set(o){const {error}=await sb.from("kv").upsert({path,data:o});if(error)throw{code:error.code||"hata"};},
+      async delete(){const {error}=await sb.from("kv").delete().eq("path",path);if(error)throw{code:error.code||"hata"};}}),
+    collection:name=>({onSnapshot(next,err){
+      const load=async()=>{const {data,error}=await sb.from("kv").select("path,data").like("path",name+"/%");
+        if(error){err&&err({code:error.code||"hata"});return;}
+        next({docs:data.filter(r=>r.path.split("/").length===2).map(r=>({id:r.path.split("/")[1],data:()=>r.data}))});};
+      load();
+      const ch=sb.channel("c_"+name+Math.random()).on("postgres_changes",{event:"*",schema:"public",table:"kv"},p=>{const path=(p.new&&p.new.path)||(p.old&&p.old.path)||"";if(path.startsWith(name+"/"))load();}).subscribe();
+      return()=>sb.removeChannel(ch);}})
+  };
+}
+let seen=null,newCount=0;
+function beep(){try{const c=new (window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=880;g.gain.value=.15;o.start();o.stop(c.currentTime+.25);}catch(e){}}
+function notifyNew(r){
+  const t=`🔔 ${r.studentName} ${MONTHS[r.month]} ${r.year} dekontunu yükledi`;
+  const d=document.createElement("div");d.className="toast";d.textContent=t;$("#toasts").appendChild(d);setTimeout(()=>d.remove(),8000);d.onclick=()=>d.remove();
+  beep();newCount++;document.title=`(${newCount}) Yeni dekont`;
+  try{if("Notification" in window&&Notification.permission==="granted")new Notification("Yeni dekont",{body:t});}catch(e){}
+}
+document.addEventListener("visibilitychange",()=>{if(!document.hidden){newCount=0;document.title="Öğrenci Dekont Sistemi";}});
+async function init(){
+  render();
+  if(SB_URL&&SB_KEY&&window.supabase){db=supaDb();dl=localDl;}else{
+  for(let i=0;i<20&&!window.claude;i++)await sleep(200);
+  if(!window.claude){localMode=!(SB_URL&&SB_KEY);db=localDb();dl=localDl;}else{
+  const lim=p=>Promise.race([p,sleep(15000).then(()=>null)]);
+  try{db=await lim(claude.use("db"));}catch(e){}
+  try{dl=await lim(claude.use("downloads"));}catch(e){}
+  if(!db){connMsg="Veritabanına bağlanılamadı. claude.ai hesabınızla giriş yaptığınızdan emin olun.";return render();}}}
+  $("#admBtn").style.display="";
+  $("#admBtn").onclick=()=>{if(isAdmin)view="admin";else{showLogin=true;loginErr="";}render();};
+  db.collection("students").onSnapshot(s=>{students=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.name.localeCompare(b.name,"tr"));render();},e=>{connMsg="Okuma hatası: "+e.code;render();});
+  db.collection("receipts").onSnapshot(s=>{receipts=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.uploadedAt-a.uploadedAt);if(seen&&isAdmin)receipts.filter(r=>!seen.has(r.id)&&Date.now()-r.uploadedAt<120000).forEach(notifyNew);seen=new Set(receipts.map(r=>r.id));render();},()=>{});
+  render();
+}
+function keep(){return [f1,f2,f3];}
+function render(){
+  const a=$("#app");
+  if(!db){a.innerHTML='<div class="card"><h2>Bağlantı</h2><p class="mut">'+esc(connMsg)+'</p></div>';return;}
+  if(view==="admin"&&isAdmin){a.innerHTML=head("Yönetici Paneli")+adminHtml();return bindAdmin();}
+  if(view==="student"&&me){a.innerHTML=head("Merhaba, "+esc(me.name))+studentHtml();return bindStudent();}
+  a.innerHTML=`<div class="card"><h2>Öğrenci Girişi</h2>
+   <label>Adınız</label><select id="sel"><option value="">Listeden seçin</option>${students.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join("")}</select>
+   <label>4 haneli şifre</label><input id="pw" type="password" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="••••">
+   <button id="go" class="full">Giriş yap</button><div class="msg" id="m">${msg}</div></div>
+  ${localMode?'<p class="mut">Yerel mod: veriler yalnızca bu tarayıcıda saklanır, başka cihazlarla paylaşılmaz.</p>':""}
+  ${showLogin?`<div class="ov"><div class="card"><h2>Yönetici Girişi</h2><label>Kullanıcı adı</label><input id="au" autocomplete="off" autocapitalize="none"><label>Şifre</label><input id="ap" type="password" autocomplete="off"><button id="al" class="full">Giriş</button><button id="ac" class="sec full" style="margin-top:10px;padding:12px">İptal</button><div class="msg">${loginErr}</div></div></div>`:""}`;
+  $("#go").onclick=()=>{const s=students.find(x=>x.id===$("#sel").value);
+    if(!s){msg="⚠ Lütfen adınızı seçin.";return render();}
+    if($("#pw").value!==s.pin){$("#m").textContent="⚠ Şifre hatalı.";return;}
+    me=s;msg="";view="student";render();};
+  if(showLogin){
+    $("#ac").onclick=()=>{showLogin=false;render();};
+    const go=async()=>{const u=$("#au").value.trim().toLowerCase(),h=await sha(u+":"+$("#ap").value);
+      const ad=ADMINS.find(x=>x.u===u&&x.h===h);if(ad){adminName=ad.name;isAdmin=true;try{if("Notification" in window&&Notification.permission==="default")Notification.requestPermission();}catch(e){}showLogin=false;view="admin";msg="";}else loginErr="⚠ Kullanıcı adı veya şifre hatalı.";render();};
+    $("#al").onclick=go;$("#ap").onkeydown=e=>{if(e.key==="Enter")go();};}
+}
+function head(t){return `<div class="top"><h2>${t}</h2><button class="sec" id="out">Çıkış</button></div>`}
+function bindOut(){const o=$("#out");if(o)o.onclick=()=>{me=null;isAdmin=false;view="home";msg="";render();};}
+function badge(r){return r.unlocked?'<span class="badge">Değişiklik izni verildi</span>':r.req==="pending"?'<span class="badge wait">İzin bekleniyor</span>':'<span class="badge lock">🔒 Kilitli</span>';}
+
+/* ---- Yönetici ---- */
+function adminHtml(){
+  const pend=receipts.filter(r=>r.req==="pending"&&okMonth(r.year,r.month));
+  const ys=availYears();if(!yr||!ys.includes(yr))yr=ys[ys.length-1];
+  const ms=allowedMonths(yr).sort((a,b)=>b-a);
+  return `${pend.length?`<div class="card"><h2>İzin talepleri (${pend.length})</h2>${pend.map(r=>`<div class="item"><div class="t">${esc(r.studentName)}</div><div class="s">${MONTHS[r.month]} ${r.year} dekontunu değiştirmek istiyor</div><div class="acts"><button class="sec" data-ok="${r.id}">İzin ver</button><button class="sec" data-no="${r.id}">Reddet</button></div></div>`).join("")}</div>`:""}
+  <div class="card"><h2>Dekontlar</h2>
+   <label>Yıl</label><select id="ys">${ys.map(y=>`<option ${y===yr?"selected":""}>${y}</option>`).join("")}</select>
+   <div style="margin-top:14px">${ms.map(m=>{const l=receipts.filter(r=>r.year===yr&&r.month===m),op=openM.has(yr+"-"+m);
+     return `<div class="item mh" data-mo="${m}"><div><span class="t">${MONTHS[m]} Ayı</span> <span class="badge">${l.length} dekont</span></div><span>${op?"▴":"▾"}</span></div>
+     ${op?`<div class="mb">${l.map(r=>`<div class="sub"><div class="t">${esc(r.studentName)}</div><div class="s">${esc(r.fileName)} · ${new Date(r.uploadedAt).toLocaleDateString("tr-TR")}</div><div style="margin-top:6px">${badge(r)}</div>
+       <div class="acts"><button class="sec" data-open="${r.id}">Görüntüle</button>${r.unlocked?`<button class="sec" data-lk="${r.id}">Kilitle</button>`:`<button class="sec" data-ok="${r.id}">İzin ver</button>`}<button class="sec" data-rm="${r.id}">Sil</button></div></div>`).join("")||'<p class="mut">Bu ay için dekont yok.</p>'}
+       ${l.length?`<button class="full" data-zip="${m}" ${zipBusy?"disabled":""}>${zipBusy===yr+"-"+m?"Hazırlanıyor…":"ZIP olarak indir"}</button>`:""}</div>`:""}`;}).join("")}</div>
+   <div class="msg">${msg}</div></div>
+  <div class="card"><h2>Öğrenci tanımla</h2><label>Ad Soyad</label><input id="nm" placeholder="Örn. Ayşe Yılmaz">
+   <button id="add" class="full">Ekle ve şifre oluştur</button></div>
+  <div class="card"><h2>Öğrenciler (${students.length})</h2>
+   ${students.map(s=>`<div class="item"><div class="t">${esc(s.name)}</div><div class="s">Şifre: <span class="pin">${esc(s.pin)}</span> · ${receipts.filter(r=>r.studentId===s.id&&okMonth(r.year,r.month)).length} dekont</div><div class="acts"><button class="sec" data-del="${s.id}">Sil</button></div></div>`).join("")||'<p class="mut">Henüz öğrenci yok.</p>'}</div>`;
+}
+function bindRows(){
+  document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openPdf(b.dataset.open));
+  document.querySelectorAll("[data-ok]").forEach(b=>b.onclick=()=>patch(receipts.find(x=>x.id===b.dataset.ok),{unlocked:true,req:"approved"}));
+  document.querySelectorAll("[data-no]").forEach(b=>b.onclick=()=>patch(receipts.find(x=>x.id===b.dataset.no),{unlocked:false,req:""}));
+  document.querySelectorAll("[data-lk]").forEach(b=>b.onclick=()=>patch(receipts.find(x=>x.id===b.dataset.lk),{unlocked:false,req:""}));
+  document.querySelectorAll("[data-rm]").forEach(b=>b.onclick=async()=>{if(await ask("Bu dekont silinsin mi?"))await removeReceipt(receipts.find(x=>x.id===b.dataset.rm));});
+}
+async function removeReceipt(r){await db.doc("receipts/"+r.id).delete();for(let i=0;i<(r.chunks||1);i++){try{await db.doc("receiptfiles/"+r.id+"_"+i).delete();}catch(e){}}}
+async function zipMonth(m){
+  if(!dl){msg="⚠ Bu görünümde dosya indirme kullanılamıyor.";return render();}
+  const l=receipts.filter(r=>r.year===yr&&r.month===m);if(!l.length)return;
+  zipBusy=yr+"-"+m;msg="";render();
+  try{
+    const z=new JSZip(),used={};
+    for(const r of l){const bytes=await getBytes(r);let n=r.studentName.replace(/[\\/:*?"<>|]/g,"").trim()||"Öğrenci";
+      used[n]=(used[n]||0)+1;if(used[n]>1)n+=" ("+used[n]+")";z.file(n+" - "+MONTHS[m]+" "+yr+".pdf",bytes);}
+    const blob=await z.generateAsync({type:"blob"});
+    await dl.save({filename:`${adminName}, ${MONTHS[m]} Ayı Maaş Dekontları.zip`,data:blob});
+    msg="✓ ZIP dosyası hazırlandı.";
+  }catch(e){msg=(e&&e.code==="cancelled")?"":"⚠ ZIP oluşturulamadı.";}
+  zipBusy="";render();
+}
+function bindAdmin(){
+  bindOut();bindRows();
+  $("#ys").onchange=e=>{yr=+e.target.value;render();};
+  document.querySelectorAll("[data-mo]").forEach(h=>h.onclick=()=>{const k=yr+"-"+h.dataset.mo;openM.has(k)?openM.delete(k):openM.add(k);render();});
+  document.querySelectorAll("[data-zip]").forEach(b=>b.onclick=()=>zipMonth(+b.dataset.zip));
+  $("#add").onclick=async()=>{const n=$("#nm").value.trim();if(!n){msg="⚠ Ad soyad girin.";return render();}
+    const id=uid(),pin=pin4();
+    try{await db.doc("students/"+id).set({name:n,pin,createdAt:Date.now()});msg=`✓ ${esc(n)} eklendi. Şifre: <span class="pin">${pin}</span>`;}
+    catch(e){msg="⚠ Kaydedilemedi: "+(e.code||"hata");}render();};
+  document.querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{
+    const st=students.find(x=>x.id===b.dataset.del);
+    if(!await ask(`${st.name} ve yüklediği dekontlar silinsin mi?`))return;
+    try{for(const r of receipts.filter(x=>x.studentId===st.id))await removeReceipt(r);await db.doc("students/"+st.id).delete();msg=`✓ ${esc(st.name)} silindi.`;}
+    catch(e){msg="⚠ Silinemedi: "+(e.code||"hata");}render();});
+}
+
+/* ---- PDF görüntüleyici ---- */
+async function getBytes(r){
+  const parts=[];for(let i=0;i<(r.chunks||1);i++){const d=await db.doc("receiptfiles/"+r.id+"_"+i).get();parts.push(atob(d.data().data));}
+  const bin=parts.join(""),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return u;
+}
+async function openPdf(id){
+  const r=receipts.find(x=>x.id===id);const pv=$("#pv");
+  pv.innerHTML=`<div class="pv"><div class="pvh"><b style="font-size:14px">${esc(r.studentName)} · ${MONTHS[r.month]} ${r.year}</b><div class="row" style="flex:none;gap:8px">${dl?'<button class="sec" id="pdl">İndir</button>':""}<button class="sec" id="pcl">Kapat</button></div></div><div class="pvb" id="pvb"><p class="mut">Dekont yükleniyor…</p></div></div>`;
+  $("#pcl").onclick=()=>pv.innerHTML="";
+  try{
+    const bytes=await getBytes(r);
+    if($("#pdl"))$("#pdl").onclick=()=>dl.save({filename:r.fileName,data:new Blob([bytes],{type:"application/pdf"})}).catch(()=>{});
+    const pdf=await pdfjsLib.getDocument({data:bytes.slice()}).promise;
+    const box=$("#pvb");box.innerHTML="";const w=Math.min(box.clientWidth-24,900);
+    for(let p=1;p<=pdf.numPages;p++){
+      const pg=await pdf.getPage(p),v0=pg.getViewport({scale:1}),sc=(w/v0.width)*(window.devicePixelRatio||1),v=pg.getViewport({scale:sc});
+      const c=document.createElement("canvas");c.width=v.width;c.height=v.height;box.appendChild(c);
+      await pg.render({canvasContext:c.getContext("2d"),viewport:v}).promise;
+    }
+  }catch(e){const b=$("#pvb");if(b)b.innerHTML='<p class="msg">⚠ Dekont açılamadı.</p>';}
+}
+
+/* ---- Öğrenci ---- */
+function studentHtml(){
+  const yrs=availYears();if(!sY||!yrs.includes(sY))sY=yrs[yrs.length-1];const am=allowedMonths(sY);
+  const mine=receipts.filter(r=>r.studentId===me.id&&okMonth(r.year,r.month));
+  return `<div class="card"><h2>Dekont yükle</h2>
+   <div class="row"><div><label>Ay</label><select id="mo">${am.map((i,k)=>`<option value="${i}" ${k===am.length-1?"selected":""}>${MONTHS[i]}</option>`).join("")}</select></div>
+   <div><label>Yıl</label><select id="yr">${yrs.map(y=>`<option ${y===sY?"selected":""}>${y}</option>`).join("")}</select></div></div>
+   <label>Dekont (PDF, en fazla 1 MB)</label><input id="file" type="file" accept="application/pdf">
+   <button id="up" class="full">Yükle</button><div class="msg">${msg}</div>
+   <p class="mut">Yüklenen dekont kilitlenir. Değiştirmek için yönetici izni gerekir.</p></div>
+  <div class="card"><h2>Yüklediklerim</h2>${mine.map(r=>`<div class="item"><div class="t">${MONTHS[r.month]} ${r.year}</div><div class="s">${esc(r.fileName)} · ${new Date(r.uploadedAt).toLocaleDateString("tr-TR")}</div><div style="margin-top:6px">${badge(r)}</div>
+   <div class="acts"><button class="sec" data-open="${r.id}">Görüntüle</button>${!r.unlocked&&r.req!=="pending"?`<button class="sec" data-rq="${r.id}">Değişiklik izni iste</button>`:""}</div></div>`).join("")||'<p class="mut">Henüz dekont yüklemediniz.</p>'}</div>`;
+}
+function bindStudent(){
+  bindOut();
+  document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openPdf(b.dataset.open));
+  document.querySelectorAll("[data-rq]").forEach(b=>b.onclick=async()=>{try{await patch(receipts.find(x=>x.id===b.dataset.rq),{req:"pending"});msg="✓ İzin talebiniz yöneticiye iletildi.";}catch(e){msg="⚠ Talep gönderilemedi.";}render();});
+  $("#yr").onchange=e=>{sY=+e.target.value;const am=allowedMonths(sY);$("#mo").innerHTML=am.map((i,k)=>`<option value="${i}" ${k===am.length-1?"selected":""}>${MONTHS[i]}</option>`).join("");};
+  $("#up").onclick=async()=>{
+    const f=$("#file").files[0];
+    if(!f)return fail("Bir PDF seçin.");
+    if(f.type!=="application/pdf")return fail("Yalnızca PDF yükleyebilirsiniz.");
+    if(f.size>MAX_BYTES)return fail("Dosya çok büyük ("+Math.round(f.size/1024)+" KB). En fazla 1 MB.");
+    const m=+$("#mo").value,y=+$("#yr").value;if(isNaN(m)||!okMonth(y,m))return fail("Bu dönem için dekont yüklenemez.");
+    const old=receipts.find(r=>r.studentId===me.id&&r.month===m&&r.year===y);
+    if(old&&!old.unlocked)return fail(`${MONTHS[m]} ${y} dekontu kilitli. Değiştirmek için "Değişiklik izni iste" butonunu kullanın.`);
+    const buf=new Uint8Array(await f.arrayBuffer()),id=uid(),n=Math.ceil(buf.length/CHUNK)||1;
+    $("#up").disabled=true;$("#up").textContent="Yükleniyor…";
+    try{
+      for(let i=0;i<n;i++){let bin="";const part=buf.subarray(i*CHUNK,(i+1)*CHUNK);for(let j=0;j<part.length;j+=8192)bin+=String.fromCharCode.apply(null,part.subarray(j,j+8192));
+        await db.doc("receiptfiles/"+id+"_"+i).set({data:btoa(bin)});}
+      await db.doc("receipts/"+id).set({studentId:me.id,studentName:me.name,month:m,year:y,fileName:f.name,chunks:n,uploadedAt:Date.now(),unlocked:false,req:""});
+      if(old)await removeReceipt(old);
+      msg="✓ Dekont yüklendi ve kilitlendi.";
+    }catch(e){msg="⚠ Yüklenemedi: "+(e.code||"hata");}
+    render();};
+}
+function fail(t){msg="⚠ "+t;render();}
+try{if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("sw.js").catch(()=>{});}catch(e){}
+init();
+</script></body></html>
